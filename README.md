@@ -40,7 +40,9 @@ El script lee `data/delta/gold/commissions` con Spark + Delta y genera:
 
 ## Running Trino in GitHub Codespaces
 
-Fase 9A valida Trino en Codespaces con un catalogo `memory` minimo. No usa todavia Delta catalog ni SQLite catalog.
+Fase 9A valida Trino en Codespaces con un catalogo `memory` minimo. Fase 9B ejecuta una consulta real sobre datos del proyecto cargando `data/raw/products.parquet` a una tabla temporal del conector `memory`.
+
+Esto todavia no es federacion final. Fase 9C agregara Delta catalog + SQLite catalog y la query federada completa.
 
 1. Abre el repositorio en GitHub Codespaces.
 2. Espera a que el devcontainer termine de crear el entorno. Instala Python dependencies, Docker-in-Docker y Java 17.
@@ -71,6 +73,24 @@ Resultado esperado de `SELECT 1`:
 ```
 
 El healthcheck guarda `exports/trino_healthcheck.json`.
+
+Fase 9B tambien genera:
+
+```text
+exports/trino_real_data_results.json
+```
+
+La query real usa datos de `products.parquet` staged en `memory.default.products` y devuelve un resumen por categoria:
+
+```sql
+SELECT
+    category,
+    COUNT(*) AS products,
+    ROUND(AVG(margin_pct), 4) AS avg_margin
+FROM memory.default.products
+GROUP BY category
+ORDER BY products DESC
+```
 
 ### Troubleshooting Codespaces
 
