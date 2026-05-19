@@ -71,3 +71,13 @@ Resultado esperado de `SELECT 1`:
 ```
 
 El healthcheck guarda `exports/trino_healthcheck.json`.
+
+### Troubleshooting Codespaces
+
+Si Codespaces entra en Recovery Mode por Docker-in-Docker + Debian trixie con un error sobre `moby-cli`, configura la feature con `"moby": false` en `.devcontainer/devcontainer.json`:
+
+```json
+"ghcr.io/devcontainers/features/docker-in-docker:2": {
+  "moby": false
+}
+```
