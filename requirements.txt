@@ -5,3 +5,5 @@ openpyxl
 pytest
 pyspark==3.5.0
 delta-spark==3.0.0
+ipywidgets==7.8.5
+great-expectations==0.18.0
