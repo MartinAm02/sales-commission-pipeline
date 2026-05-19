@@ -1,0 +1,12 @@
+{
+  "service": "trino",
+  "host": "localhost",
+  "port": 8080,
+  "query": "SELECT 1",
+  "rows": [
+    {
+      "result": 1
+    }
+  ],
+  "success": true
+}
