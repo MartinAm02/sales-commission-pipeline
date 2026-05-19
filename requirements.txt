@@ -3,3 +3,5 @@ numpy
 pyarrow
 openpyxl
 pytest
+pyspark==3.5.0
+delta-spark==3.0.0
