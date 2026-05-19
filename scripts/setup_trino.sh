@@ -24,6 +24,13 @@ if ! python -c "import trino" >/dev/null 2>&1; then
   exit 1
 fi
 
+if [ -f "data/raw/products.parquet" ]; then
+  echo "Raw sources found."
+else
+  echo "Raw sources missing. Generating synthetic sources..."
+  python src/generate_sources.py
+fi
+
 echo "Starting Trino with Docker Compose..."
 if ! docker compose up -d; then
   echo "Failed to start Trino with Docker Compose." >&2
