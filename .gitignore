@@ -1,5 +1,6 @@
 data/raw/
 data/delta/
+data/commissions_report.xlsx
 __pycache__/
 .venv/
 .env

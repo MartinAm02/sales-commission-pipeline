@@ -21,3 +21,19 @@ python -m venv .venv
 - `data/raw/sales_reps.db`: base SQLite con la tabla `sales_reps`.
 - `data/raw/transactions.csv`: dos años de transacciones sintéticas.
 - `data/raw/products.parquet`: catálogo de productos con categoría y margen.
+
+## Como generar el reporte y JSON
+
+Despues de correr ingestion, transform y quality, genera los artefactos finales:
+
+```powershell
+$env:JAVA_HOME='C:\Program Files\Eclipse Adoptium\jdk-17.0.19.10-hotspot'
+$env:HADOOP_HOME='C:\hadoop'
+$env:Path="$env:JAVA_HOME\bin;$env:HADOOP_HOME\bin;$env:Path"
+.venv\Scripts\python src\report.py
+```
+
+El script lee `data/delta/gold/commissions` con Spark + Delta y genera:
+
+- `data/commissions_report.xlsx`: reporte Excel con hojas `Commissions` y `By Region`.
+- `exports/commissions.json`: JSON orientado a records, indentado y listo para frontend.
