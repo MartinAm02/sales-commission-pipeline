@@ -1,0 +1,25 @@
+{
+  "name": "Sales Commission Pipeline",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "remoteEnv": {
+    "JAVA_HOME": "/usr/lib/jvm/java-17-openjdk-amd64"
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y openjdk-17-jdk && python -m pip install --upgrade pip && pip install -r requirements.txt",
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Trino",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python"
+      ]
+    }
+  }
+}

@@ -37,3 +37,37 @@ El script lee `data/delta/gold/commissions` con Spark + Delta y genera:
 
 - `data/commissions_report.xlsx`: reporte Excel con hojas `Commissions` y `By Region`.
 - `exports/commissions.json`: JSON orientado a records, indentado y listo para frontend.
+
+## Running Trino in GitHub Codespaces
+
+Fase 9A valida Trino en Codespaces con un catalogo `memory` minimo. No usa todavia Delta catalog ni SQLite catalog.
+
+1. Abre el repositorio en GitHub Codespaces.
+2. Espera a que el devcontainer termine de crear el entorno. Instala Python dependencies, Docker-in-Docker y Java 17.
+3. Levanta Trino:
+
+```bash
+bash scripts/setup_trino.sh
+```
+
+4. Ejecuta el healthcheck desde Python:
+
+```bash
+python src/trino_query.py
+```
+
+5. Verifica la UI/API de Trino en:
+
+```text
+http://localhost:8080
+```
+
+Resultado esperado de `SELECT 1`:
+
+```text
+|   result |
+|----------|
+|        1 |
+```
+
+El healthcheck guarda `exports/trino_healthcheck.json`.
