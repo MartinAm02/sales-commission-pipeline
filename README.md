@@ -46,6 +46,20 @@ Esto todavia no es federacion final. Fase 9C agregara Delta catalog + SQLite cat
 
 `data/raw/` no se versiona en Git. En un Codespace nuevo puede faltar `products.parquet`; `scripts/setup_trino.sh` lo detecta y ejecuta `python src/generate_sources.py` automaticamente solo cuando las fuentes raw no existen. Si las fuentes ya existen, imprime `Raw sources found.` y no las regenera.
 
+Despues de cambios en `.devcontainer/devcontainer.json`, reconstruye el Codespace para que tome la imagen `python:3.11-bookworm`, Docker-in-Docker y la feature oficial de Java 17.
+
+Valida Java y Spark en Codespaces:
+
+```bash
+source scripts/setup_codespaces_env.sh
+which java
+java -version
+echo $JAVA_HOME
+python src/ingest.py
+python src/transform.py
+python src/quality.py
+```
+
 1. Abre el repositorio en GitHub Codespaces.
 2. Espera a que el devcontainer termine de crear el entorno. Instala Python dependencies, Docker-in-Docker y Java 17.
 3. Levanta Trino:

@@ -1,15 +1,17 @@
 {
   "name": "Sales Commission Pipeline",
-  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "moby": false
+    },
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "installMaven": false,
+      "installGradle": false
     }
   },
-  "remoteEnv": {
-    "JAVA_HOME": "/usr/lib/jvm/java-17-openjdk-amd64"
-  },
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y openjdk-17-jdk && python -m pip install --upgrade pip && pip install -r requirements.txt",
+  "postCreateCommand": "bash scripts/setup_codespaces_env.sh && python -m pip install --upgrade pip && pip install -r requirements.txt",
   "forwardPorts": [8080],
   "portsAttributes": {
     "8080": {

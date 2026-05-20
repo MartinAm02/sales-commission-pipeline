@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source scripts/setup_codespaces_env.sh
+
 if ! command -v docker >/dev/null 2>&1; then
   echo "Docker is not available. Rebuild the Codespace with Docker-in-Docker enabled." >&2
   exit 1
