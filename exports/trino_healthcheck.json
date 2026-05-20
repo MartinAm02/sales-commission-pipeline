@@ -2,6 +2,7 @@
   "service": "trino",
   "host": "localhost",
   "port": 8080,
+  "mode": "healthcheck",
   "query": "SELECT 1",
   "rows": [
     {

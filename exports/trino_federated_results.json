@@ -1,0 +1,104 @@
+{
+  "success": true,
+  "mode": "federation-style-staged-fallback",
+  "fallback_used": true,
+  "attempted_real_federation": true,
+  "staged_records": {
+    "sales_enriched": 10351,
+    "sales_reps": 20
+  },
+  "query": "SELECT r.name AS rep_name, r.region, r.tier, r.quota, SUM(t.amount) AS total_sales, COUNT(t.txn_id) AS num_transactions, ROUND(SUM(t.amount) / r.quota * 100, 1) AS quota_attainment_pct FROM memory.default.sales_enriched t JOIN memory.default.sales_reps r ON t.rep_id = r.rep_id GROUP BY r.name, r.region, r.tier, r.quota ORDER BY total_sales DESC LIMIT 10",
+  "limitation": "Delta + SQLite Trino connector federation is not configured or validated yet. This fallback still executes SQL in Trino over two separate memory tables staged from Delta Silver and SQLite project data.",
+  "rows": [
+    {
+      "rep_name": "Rep 5",
+      "region": "CENTRO",
+      "tier": "Junior",
+      "quota": 58792,
+      "total_sales": 4565302.93,
+      "num_transactions": 597,
+      "quota_attainment_pct": 7765.2
+    },
+    {
+      "rep_name": "Rep 13",
+      "region": "CENTRO",
+      "tier": "Junior",
+      "quota": 156530,
+      "total_sales": 4369837.25,
+      "num_transactions": 567,
+      "quota_attainment_pct": 2791.7
+    },
+    {
+      "rep_name": "Rep 3",
+      "region": "NORTE",
+      "tier": "Senior",
+      "quota": 137313,
+      "total_sales": 4332014.48,
+      "num_transactions": 536,
+      "quota_attainment_pct": 3154.8
+    },
+    {
+      "rep_name": "Rep 8",
+      "region": "NORTE",
+      "tier": "Mid",
+      "quota": 170174,
+      "total_sales": 4249956.06,
+      "num_transactions": 545,
+      "quota_attainment_pct": 2497.4
+    },
+    {
+      "rep_name": "Rep 19",
+      "region": "OCCIDENTE",
+      "tier": "Mid",
+      "quota": 59692,
+      "total_sales": 4245069.17,
+      "num_transactions": 539,
+      "quota_attainment_pct": 7111.6
+    },
+    {
+      "rep_name": "Rep 6",
+      "region": "OCCIDENTE",
+      "tier": "Junior",
+      "quota": 118148,
+      "total_sales": 4176648.99,
+      "num_transactions": 523,
+      "quota_attainment_pct": 3535.1
+    },
+    {
+      "rep_name": "Rep 20",
+      "region": "CENTRO",
+      "tier": "Junior",
+      "quota": 87065,
+      "total_sales": 4159143.44,
+      "num_transactions": 526,
+      "quota_attainment_pct": 4777.1
+    },
+    {
+      "rep_name": "Rep 9",
+      "region": "CENTRO",
+      "tier": "Mid",
+      "quota": 174358,
+      "total_sales": 4125744.53,
+      "num_transactions": 521,
+      "quota_attainment_pct": 2366.2
+    },
+    {
+      "rep_name": "Rep 1",
+      "region": "CENTRO",
+      "tier": "Junior",
+      "quota": 53890,
+      "total_sales": 4101512.31,
+      "num_transactions": 527,
+      "quota_attainment_pct": 7610.9
+    },
+    {
+      "rep_name": "Rep 4",
+      "region": "CENTRO",
+      "tier": "Junior",
+      "quota": 191699,
+      "total_sales": 4082488.26,
+      "num_transactions": 517,
+      "quota_attainment_pct": 2129.6
+    }
+  ]
+}

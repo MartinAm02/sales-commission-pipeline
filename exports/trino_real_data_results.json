@@ -1,0 +1,29 @@
+{
+  "service": "trino",
+  "host": "localhost",
+  "port": 8080,
+  "mode": "real-data",
+  "strategy": "Trino real query over staged project data",
+  "source": "data/raw/products.parquet",
+  "staged_records": 50,
+  "query": "SELECT category, COUNT(*) AS products, ROUND(AVG(margin_pct), 4) AS avg_margin FROM memory.default.products GROUP BY category ORDER BY products DESC",
+  "rows": [
+    {
+      "category": "Software",
+      "products": 19,
+      "avg_margin": 0.3249
+    },
+    {
+      "category": "Hardware",
+      "products": 18,
+      "avg_margin": 0.3009
+    },
+    {
+      "category": "Services",
+      "products": 13,
+      "avg_margin": 0.2011
+    }
+  ],
+  "success": true,
+  "limitation": "Uses Trino memory connector staged from products.parquet; final Delta + SQLite federation is planned for Phase 9C."
+}
