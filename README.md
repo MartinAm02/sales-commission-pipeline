@@ -40,9 +40,14 @@ El script lee `data/delta/gold/commissions` con Spark + Delta y genera:
 
 ## Running Trino in GitHub Codespaces
 
-Fase 9A valida Trino en Codespaces con un catalogo `memory` minimo. Fase 9B ejecuta una consulta real sobre datos del proyecto cargando `data/raw/products.parquet` a una tabla temporal del conector `memory`.
+Fase 9A valida Trino en Codespaces con un catalogo `memory` minimo. Fase 9B ejecuta una consulta real sobre datos del proyecto cargando `data/raw/products.parquet` a una tabla temporal del conector `memory`. Fase 9C intenta federacion real y, si los conectores directos no estan configurados, ejecuta un fallback staged.
 
-Esto todavia no es federacion final. Fase 9C agregara Delta catalog + SQLite catalog y la query federada completa.
+En Fase 9C hay dos modos:
+
+- `real-connector-federation`: Trino consulta directamente catalogos `delta` y `sqlite`, cuando ambos existan y esten validados.
+- `federation-style-staged-fallback`: PySpark lee `data/delta/silver/sales_enriched`, pandas/sqlite3 lee `data/raw/sales_reps.db`, ambos datasets se cargan como tablas separadas en `memory.default`, y Trino ejecuta SQL con `JOIN` sobre esas dos tablas.
+
+El fallback no afirma tener Delta + SQLite connectors finales. La federacion directa de conectores queda como siguiente endurecimiento cuando se agreguen catalogos Trino productivos.
 
 `data/raw/` no se versiona en Git. En un Codespace nuevo puede faltar `products.parquet`; `scripts/setup_trino.sh` lo detecta y ejecuta `python src/generate_sources.py` automaticamente solo cuando las fuentes raw no existen. Si las fuentes ya existen, imprime `Raw sources found.` y no las regenera.
 
@@ -96,6 +101,12 @@ Fase 9B tambien genera:
 exports/trino_real_data_results.json
 ```
 
+Fase 9C genera:
+
+```text
+exports/trino_federated_results.json
+```
+
 La query real usa datos de `products.parquet` staged en `memory.default.products` y devuelve un resumen por categoria:
 
 ```sql
@@ -106,6 +117,24 @@ SELECT
 FROM memory.default.products
 GROUP BY category
 ORDER BY products DESC
+```
+
+La query de Fase 9C, ya sea real o staged fallback, produce top 10 reps por ventas:
+
+```sql
+SELECT
+    r.name AS rep_name,
+    r.region,
+    r.tier,
+    r.quota,
+    SUM(t.amount) AS total_sales,
+    COUNT(t.txn_id) AS num_transactions,
+    ROUND(SUM(t.amount) / r.quota * 100, 1) AS quota_attainment_pct
+FROM memory.default.sales_enriched t
+JOIN memory.default.sales_reps r ON t.rep_id = r.rep_id
+GROUP BY r.name, r.region, r.tier, r.quota
+ORDER BY total_sales DESC
+LIMIT 10
 ```
 
 ### Troubleshooting Codespaces
